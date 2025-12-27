@@ -73,18 +73,17 @@ app.post('/api/game/:gameId/guess', (req, res) => {
             game.status = 'lost';
             message = `Game Over! The number was ${game.numberToGuess}.`;
         } else {
+            const difference = Math.abs(guess - game.numberToGuess);
+            
             if (guess < game.numberToGuess) {
                 hint = 'too_low';
                 message = 'Too low! Try again.';
+            } else if (difference <= 3) {
+                hint = 'very_close';
+                message = 'You are very close to the number!';
             } else {
-                const difference = Math.abs(guess - game.numberToGuess);
-                if (difference <= 3) {
-                    hint = 'very_close';
-                    message = 'You are very close to the number!';
-                } else {
-                    hint = 'too_high';
-                    message = 'Too high! Try again.';
-                }
+                hint = 'too_high';
+                message = 'Too high! Try again.';
             }
         }
     }
